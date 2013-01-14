@@ -17,18 +17,18 @@
 
 #include "ScriptPCH.h"
 
-class vendor : public CreatureScript
+class VIP_VPC : public CreatureScript
 {
 	public:
-vendor() : CreatureScript("vendor") { }
+	VIP_VPC() : CreatureScript("VIP_VPC") { }
 
 
 	bool OnGossipHello(Player * player, Creature * creature)
 	{
-		if(player->isInCombat)
+		if(player->isInCombat())
 			return false;
 
-		if(player->GetSession()->GetSecurity() >= 0)
+		if(player->GetSession()->GetSecurity() >= 1)
 		{
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Buy something", GOSSIP_SENDER_MAIN, 0);
 		} 
@@ -37,6 +37,7 @@ vendor() : CreatureScript("vendor") { }
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "No Access!", GOSSIP_SENDER_MAIN, 1);
 		}
 		player->PlayerTalkClass->SendGossipMenu(9000, creature->GetGUID());
+		return true;
 	}
 	
 	bool OnGossipSelect(Player * player, Creature * creature, uint32 sender, uint32 action, ChatHandler *handler)
@@ -51,17 +52,15 @@ vendor() : CreatureScript("vendor") { }
 
 		case 1:
 			{
-				handler->PSendSysMessage(" %s you son of a bitch, you're a %s"), player->GetName, player->getGender();
+				handler->PSendSysMessage(" %s you son of a bitch, you're a %s"), player->GetName(), player->getGender();
 				player->GetSession()->KickPlayer();
 				player->CLOSE_GOSSIP_MENU();
 			}break;
 		}
 	}
-
-
 };
 
-void AddSC_vendor()
+void AddSC_VIP_NPC()
 {
-	new vendor();
+	new VIP_VPC();
 }
